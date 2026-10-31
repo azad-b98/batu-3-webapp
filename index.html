@@ -1,0 +1,1544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Kg Batu 3</title>
+   <link rel="icon" type="image/x-icon" href="https://media.azxgo.com/batu3/fvcon.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Supabase Official JS SDK CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    :root {
+      --primary: #f97316;
+      --primary-hover: #ea580c;
+      --primary-light: #ffedd5;
+      --primary-dark: #c2410c;
+      --accent-blue: #0284c7;
+      --accent-yellow: #eab308;
+      --bg-page: #f8fafc;
+      --surface-white: #ffffff;
+      --border-subtle: #fed7aa;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --danger: #ef4444;
+      --success: #10b981;
+      --shadow-sm: 0 4px 12px rgba(249, 115, 22, 0.08);
+      --shadow-md: 0 12px 28px rgba(249, 115, 22, 0.12);
+      --shadow-lg: 0 20px 40px rgba(249, 115, 22, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(254, 215, 170, 0.45) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(254, 240, 138, 0.3) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* Ambient animated orbs */
+    .bg-shape {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.6;
+      animation: floatMotion 12s ease-in-out infinite alternate;
+    }
+    .shape-1 { width: 380px; height: 380px; background: #fed7aa; top: -100px; left: -80px; }
+    .shape-2 { width: 340px; height: 340px; background: #fef08a; bottom: -80px; right: -80px; animation-delay: -5s; }
+
+    @keyframes floatMotion {
+      0% { transform: translate(0px, 0px) scale(1); }
+      100% { transform: translate(30px, 40px) scale(1.1); }
+    }
+
+        /* Header Navigation - Compact & Modern */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border-bottom: 1.5px solid var(--border-subtle);
+      padding: 0.55rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(249, 115, 22, 0.06);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1rem;
+      color: #9a3412;
+      text-decoration: none;
+    }
+
+    /* Casual Outline House Icon Container */
+    .brand-icon-casual {
+      width: 32px;
+      height: 32px;
+      background: #ffedd5;
+      color: #ea580c;
+      border: 1.5px solid #fed7aa;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease;
+    }
+    .brand-icon-casual svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .brand:hover .brand-icon-casual {
+      transform: scale(1.05);
+    }
+
+    .brand-title {
+      line-height: 1.2;
+    }
+    .brand-title span {
+      display: block;
+      font-size: 1.00rem;
+      font-weight: 800;
+      color: #7c2d12;
+    }
+    .brand-subtitle {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #9a3412;
+      opacity: 0.75;
+    }
+
+    /* Right Navigation Actions Container */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Extra-Small Cloud Sync Badge */
+    .cloud-sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 99px;
+      background: #ecfdf5;
+      color: #047857;
+      border: 1px solid #a7f3d0;
+      white-space: nowrap;
+    }
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.7);
+    }
+
+    /* Extra-Small Admin Pill */
+    .admin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+    .admin-pill.locked {
+      background: #f8fafc;
+      color: #64748b;
+      border-color: #cbd5e1;
+    }
+    .admin-pill.locked:hover {
+      background: #f1f5f9;
+      color: #334155;
+    }
+    .admin-pill.active {
+      background: #ffedd5;
+      color: #c2410c;
+      border-color: #fdba74;
+      box-shadow: 0 0 8px rgba(249, 115, 22, 0.25);
+    }
+
+    /* Extra-Small Action Buttons */
+    .btn-nav-xs {
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+    .btn-nav-outline-xs {
+      background: #ffffff;
+      color: #475569;
+      border-color: #cbd5e1;
+    }
+    .btn-nav-outline-xs:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+    .btn-nav-danger-xs {
+      background: #fee2e2;
+      color: #dc2626;
+      border-color: #fca5a5;
+    }
+    .btn-nav-danger-xs:hover {
+      background: #dc2626;
+      color: #ffffff;
+    }
+
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 1.15rem;
+      color: #9a3412;
+    }
+
+    .brand-icon {
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      color: white;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1.25rem;
+      box-shadow: 0 4px 12px rgba(249, 115, 22, 0.35);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1.5px solid transparent;
+    }
+
+    .admin-pill.locked {
+      background: #ffffff;
+      color: #64748b;
+      border-color: #cbd5e1;
+    }
+
+    .admin-pill.active {
+      background: #ffedd5;
+      color: #c2410c;
+      border-color: #fdba74;
+      box-shadow: 0 0 10px rgba(249, 115, 22, 0.25);
+    }
+
+    .btn-nav {
+      padding: 7px 15px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+    }
+
+    .btn-nav-outline {
+      background: #ffffff;
+      color: #475569;
+      border: 1.5px solid #cbd5e1;
+    }
+
+    .btn-nav-danger {
+      background: #fee2e2;
+      color: #dc2626;
+      border: 1.5px solid #fca5a5;
+    }
+
+    /* Views Layout */
+    .app-container {
+      flex: 1;
+      position: relative;
+      z-index: 10;
+      max-width: 1240px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 1.5rem;
+    }
+
+    .view-section {
+      display: none;
+      animation: viewSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes viewSlideIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Welcome / Login Section */
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+      align-items: center;
+      min-height: calc(85vh - 70px);
+    }
+
+    @media (min-width: 900px) {
+      .welcome-grid {
+        grid-template-columns: 1fr 1.2fr;
+      }
+    }
+
+    .login-card {
+      background: var(--surface-white);
+      border: 2px solid var(--border-subtle);
+      border-radius: 28px;
+      padding: 2.8rem 2.2rem;
+      box-shadow: var(--shadow-lg);
+      text-align: center;
+    }
+
+    .login-badge {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1.25rem;
+      background: linear-gradient(135deg, #ffedd5, #fed7aa);
+      border: 2px solid #fdba74;
+      border-radius: 22px;
+      display: grid;
+      place-items: center;
+      font-size: 2.2rem;
+      box-shadow: 0 8px 18px rgba(249, 115, 22, 0.2);
+    }
+
+    .form-group {
+      text-align: left;
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .input-box {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: 12px;
+      background: #fffaf5;
+      border: 2px solid #fdba74;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+
+    .input-box:focus {
+      outline: none;
+      background: #ffffff;
+      border-color: #f97316;
+      box-shadow: 0 0 0 4px rgba(249, 115, 22, 0.18);
+    }
+
+    .btn-primary-action {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      border: none;
+      border-radius: 14px;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 10px 22px rgba(234, 88, 12, 0.35);
+    }
+
+    .btn-primary-action:hover {
+      background: linear-gradient(135deg, #ea580c, #c2410c);
+      transform: translateY(-2px);
+    }
+
+    /* Cards */
+    .white-card {
+      background: var(--surface-white);
+      border-radius: 22px;
+      border: 2px solid var(--border-subtle);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+
+    /* Gallery Marquee Horizontal Slider */
+    .gallery-container {
+      position: relative;
+      margin: 1.8rem 0;
+      overflow: hidden;
+      border-radius: 24px;
+      background: #fffaf5;
+      border: 2px solid #fed7aa;
+      padding: 1.5rem;
+      box-shadow: var(--shadow-md);
+    }
+
+    .gallery-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .gallery-scroller-wrapper {
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #fdba74 transparent;
+      padding-bottom: 8px;
+    }
+
+    .gallery-scroller-wrapper::-webkit-scrollbar {
+      height: 6px;
+    }
+    .gallery-scroller-wrapper::-webkit-scrollbar-thumb {
+      background-color: #fdba74;
+      border-radius: 99px;
+    }
+
+    .gallery-track {
+      display: flex;
+      gap: 16px;
+      width: max-content;
+      animation: autoScrollTrack 40s linear infinite;
+    }
+
+    .gallery-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes autoScrollTrack {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .gallery-card {
+      width: 250px;
+      flex-shrink: 0;
+      border-radius: 18px;
+      background: #ffffff;
+      border: 1.5px solid #fed7aa;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      transition: transform 0.25s ease;
+    }
+
+    .gallery-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .gallery-card img {
+      width: 100%;
+      height: 155px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-card-info {
+      padding: 12px 14px;
+    }
+
+    .gallery-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #ea580c;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .gallery-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #7c2d12;
+      margin-top: 2px;
+    }
+
+    .btn-delete-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #dc2626;
+      border-radius: 8px;
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .btn-delete-badge:hover {
+      background: #dc2626;
+      color: white;
+    }
+
+    /* Announcements Component */
+    .announcement-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .announcement-item {
+      background: #fffaf5;
+      border-left: 5px solid #f97316;
+      border-radius: 0 14px 14px 0;
+      padding: 1rem;
+      border-top: 1px solid #ffedd5;
+      border-right: 1px solid #ffedd5;
+      border-bottom: 1px solid #ffedd5;
+      position: relative;
+    }
+
+    .announcement-item h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #9a3412;
+      margin-bottom: 4px;
+      padding-right: 24px;
+    }
+
+    .announcement-date {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #f97316;
+      margin-bottom: 4px;
+    }
+
+    .announcement-text {
+      font-size: 0.86rem;
+      color: #475569;
+      line-height: 1.45;
+    }
+
+    /* Interactive Aerial Map */
+    .map-viewport {
+      position: relative;
+      width: 100%;
+      border-radius: 24px;
+      border: 3px solid #fed7aa;
+      background: #000;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .aerial-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      user-select: none;
+    }
+
+    .plot-pin {
+      position: absolute;
+      transform: translate(-50%, -50%);
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: white;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 20;
+    }
+
+    .plot-blue {
+      background: #0284c7;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 10px rgba(2, 132, 199, 0.8);
+    }
+
+    .plot-yellow {
+      background: #eab308;
+      border: 2px solid #ffffff;
+      color: #422006;
+      box-shadow: 0 0 10px rgba(234, 179, 8, 0.9);
+    }
+
+    .plot-pin:hover {
+      transform: translate(-50%, -50%) scale(1.6);
+      z-index: 50;
+    }
+
+    /* Modals & Popouts */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 700;
+      display: none;
+      place-items: center;
+      padding: 1.25rem;
+    }
+
+    .modal-overlay.active {
+      display: grid;
+    }
+
+    .modal-box {
+      background: var(--surface-white);
+      border-radius: 24px;
+      border: 2px solid #fed7aa;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalScale {
+      from { transform: scale(0.93); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-head {
+      background: #fff7ed;
+      border-bottom: 2px solid #fed7aa;
+      padding: 1.2rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-head h3 {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #9a3412;
+    }
+
+    .btn-close-x {
+      background: #fed7aa;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      color: #9a3412;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .modal-content-area {
+      padding: 1.5rem;
+    }
+
+    .data-card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 0;
+      border-bottom: 1.5px solid #f1f5f9;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.5rem;
+    }
+    .data-table th, .data-table td {
+      padding: 10px 12px;
+      text-align: left;
+      font-size: 0.86rem;
+      border-bottom: 1.5px solid #f1f5f9;
+    }
+
+    .cloud-sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #bbf7d0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-shape shape-1"></div>
+  <div class="bg-shape shape-2"></div>
+
+  <!-- Global Header with Casual House Icon & Compact Controls -->
+  <header>
+    <!-- Brand / Logo Area -->
+    <div class="brand">
+      <div class="brand-icon-casual" title="Batu 3 Portal">
+        <!-- Friendly Casual Line-art House SVG -->
+        <svg viewBox="0 0 24 24">
+          <path d="M3 10.5L12 3l9 7.5V20a1.5 1.5 0 0 1-1.5 1.5h-4a1 1 0 0 1-1-1v-4.5a1 1 0 0 0-1-1h-3a1 1 0 0 0-1 1V20a1 1 0 0 1-1 1H4.5A1.5 1.5 0 0 1 3 20v-9.5z" />
+          <path d="M9 3.5V6" />
+        </svg>
+      </div>
+      <div class="brand-title">
+        <span>Kg Batu Tiga</span>
+        <div class="brand-subtitle">Portal Penduduk</div>
+      </div>
+    </div>
+
+    <!-- Right Controls: Connection Status, Admin, Menu Back, Logout -->
+    <div class="nav-actions">
+      <!-- Supabase Connection Badge (Extra Small) -->
+      <span id="dbStatusBadge" class="cloud-sync-badge" style="display:none;" title="Connected to Supabase">
+        <span class="status-dot"></span>
+        <span>Sync</span>
+      </span>
+
+      <!-- Admin Toggle Pill (Extra Small) -->
+      <button id="adminToggleBtn" class="admin-pill locked" style="display:none;" onclick="handleAdminModeClick()" title="Toggle Admin Authentication">
+        <span id="adminStatusIcon" style="font-size:0.75rem;">🔒</span>
+        <span id="adminStatusText">Admin</span>
+      </button>
+
+      <!-- Back to Menu Button (Map View Only) -->
+      <button id="navBackBtn" class="btn-nav-xs btn-nav-outline-xs" style="display:none;" onclick="switchView('viewMenu')">
+        <span>Menu</span>
+      </button>
+
+      <!-- Logout Button (Extra Small) -->
+      <button id="headerLogoutBtn" class="btn-nav-xs btn-nav-danger-xs" style="display:none;" onclick="promptLogoutReminder()" title="Sign out of your session">
+        <span>Logout</span>
+      </button>
+    </div>
+  </header>
+
+
+  <main class="app-container">
+
+    <!-- VIEW 1: WELCOME & LOGIN (PASSWORD ONLY: 'batutiga') -->
+    <section id="viewWelcome" class="view-section active">
+      <div class="welcome-grid">
+
+        <!-- Login Card -->
+        <div class="login-card">
+          <div class="login-badge">🔑</div>
+          <h1 style="color:#7c2d12; font-weight:800; font-size:1.8rem; margin-bottom:6px;">Kg Batu Tiga</h1>
+          <p style="color:#64748b; font-size:0.92rem; margin-bottom:1.8rem;">Selamat datang komuniti Kg Batu Tiga</p>
+
+          <form onsubmit="handleUserLogin(event)">
+            <div class="form-group">
+              <input type="password" id="portalPassword" class="input-box" placeholder="Kata laluan" required autofocus>
+            </div>
+            <button type="submit" class="btn-primary-action">Log Masuk</button>
+            <div id="loginFeedbackMsg" style="margin-top:14px; font-weight:700; font-size:0.88rem; min-height:20px;"></div>
+          </form>
+        </div>
+
+        <!-- Sync Notice Preview on Login Page -->
+        <div class="white-card">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <div>
+              <h3 style="color: #7c2d12; font-weight:800; font-size:1.25rem;">Pengumuman</h3>
+              <p style="color: #64748b; font-size: 0.85rem;">Kemaskini terkini makluman</p>
+            </div>
+            <span style="background:#ffedd5; color:#c2410c; padding:4px 10px; border-radius:99px; font-weight:800; font-size:0.75rem;">Public Notices</span>
+          </div>
+          <div class="announcement-box" id="loginAnnouncementsList"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- VIEW 2: DASHBOARD MENU -->
+    <section id="viewMenu" class="view-section">
+      <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h2 style="font-size:2rem; font-weight:800; color:#7c2d12;">Dashboard Komuniti</h2>
+          <p style="color:#64748b; font-size:0.95rem;">Pengurusan penduduk lot Kampung Batu Tiga Jalan Bangi</p>
+        </div>
+        <div id="adminIndicatorBar" style="display:none;">
+          <span style="background: #ffedd5; color: #c2410c; padding: 6px 14px; border-radius: 99px; font-weight: 800; font-size: 0.82rem; border: 1.5px solid #fdba74;">
+            👑 Mod Admin Aktif(Edit & Delete Enabled)
+          </span>
+        </div>
+      </div>
+
+      <!-- MAIN FEATURES GRID -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+
+        <!-- Left: Aerial Map Launch Card & Sectors -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+          <div class="white-card" style="border: 2px solid #fb923c; background: linear-gradient(140deg, #ffffff 0%, #fff7ed 100%);">
+            <span style="display:inline-block; padding:4px 12px; background:#ffedd5; color:#c2410c; border-radius:99px; font-size:0.75rem; font-weight:800; text-transform:uppercase; margin-bottom:0.75rem;">
+              ⭐ Fitur Utama
+            </span>
+            <h3 style="font-size: 1.45rem; font-weight: 800; color: #7c2d12; margin-bottom: 6px;">
+              Peta Penduduk Interaktif
+            </h3>
+            <p style="color: #64748b; font-size: 0.92rem; margin-bottom: 1.4rem;">
+              Tinjauan fotografi bagi Lot Lot 718 dan Lot 722. Klik pada mana-mana lot untuk mendapatkan butiran lanjut.
+            </p>
+            <button class="btn-primary-action" onclick="switchView('viewMap')">
+              Lancar Peta 🗺️
+            </button>
+          </div>
+
+          <!-- Sector Directory -->
+          <div class="white-card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <div>
+                <h3 style="font-size: 1.2rem; font-weight: 800; color: #7c2d12;">Direktori Penduduk</h3>
+                <p style="color: #64748b; font-size: 0.85rem;">Daftar Akses Lot 718 & 722</p>
+              </div>
+              <button id="adminAddLotBtn" class="btn-nav btn-nav-outline" style="display:none; font-size:0.75rem;" onclick="openAddLotModal()">
+                + Add Lot
+              </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+              <button class="btn-primary-action" style="background:#e0f2fe; color:#0369a1; border:2px solid #7dd3fc; box-shadow:none;" onclick="openSectorDirectoryModal('718')">
+                <div style="font-size:1.4rem;">🔵</div>
+                <div>Lot 718</div>
+                <small id="count718" style="font-size:0.75rem; opacity:0.8;">- Lots</small>
+              </button>
+              <button class="btn-primary-action" style="background:#fef9c3; color:#854d0e; border:2px solid #fde047; box-shadow:none;" onclick="openSectorDirectoryModal('722')">
+                <div style="font-size:1.4rem;">🟡</div>
+                <div>Lot 722</div>
+                <small id="count722" style="font-size:0.75rem; opacity:0.8;">- Lots</small>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Dashboard Announcements (Synchronized) -->
+        <div class="white-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem;">
+            <div>
+              <h3 style="font-size: 1.2rem; font-weight: 800; color: #7c2d12;">Pengumuman</h3>
+              <p style="color: #64748b; font-size: 0.85rem;">Pekeliling Rasmi</p>
+            </div>
+            <button id="adminAddAnnounceBtn" class="btn-nav btn-nav-outline" style="display:none; font-size:0.75rem;" onclick="openAppModal('modalAnnounceForm')">
+              + Tambah & Edit
+            </button>
+          </div>
+          <div class="announcement-box" id="dashboardAnnouncementsList"></div>
+        </div>
+
+      </div>
+
+      <!-- GALLERY SECTION (MOVING HORIZONTALLY) -->
+      <div class="gallery-container">
+        <div class="gallery-header">
+          <div>
+            <h3 style="font-size: 1.25rem; font-weight: 800; color: #7c2d12;">Galeri Komuniti</h3>
+            <p style="font-size: 0.85rem; color: #64748b;">Kemaskini Aktiviti Kejiranan</p>
+          </div>
+          <button id="adminAddGalleryBtn" class="btn-nav btn-nav-outline" style="display:none;" onclick="openAppModal('modalGalleryForm')">
+            + Tambah Gambar
+          </button>
+        </div>
+
+        <div class="gallery-scroller-wrapper">
+          <div class="gallery-track" id="galleryTrack"></div>
+        </div>
+      </div>
+
+      <!-- Logout Reminder -->
+      <div style="margin-top:1.5rem; background:#fff7ed; border:2px dashed #fdba74; border-radius:18px; padding:14px 20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <span style="font-size:1.8rem;">🔔</span>
+          <div>
+            <strong style="color:#9a3412;">Peringatan Sesi Keselamatan</strong>
+            <p style="color:#64748b; font-size:0.84rem;">Log keluar sebelum menutup sesi.</p>
+          </div>
+        </div>
+        <button class="btn-nav btn-nav-danger" style="flex:1; justify-content:center;" onclick="promptLogoutReminder()">Log Out Sekarang</button>
+      </div>
+    </section>
+
+    <!-- VIEW 3: INTERACTIVE MAP -->
+    <section id="viewMap" class="view-section">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; flex-wrap:wrap; gap:10px;">
+        <div>
+          <h2 style="font-size:1.5rem; font-weight:800; color:#7c2d12;">Peta Kawasan Kediaman</h2>
+          <p style="color:#64748b; font-size:0.85rem;">Klik pada mana-mana plot untuk menyemak pemilik</p>
+        </div>
+        <button class="btn-nav btn-nav-outline" onclick="switchView('viewMenu')">Menu</button>
+      </div>
+
+      <div class="map-viewport">
+        <div style="position:relative; width:100%;">
+          <img id="mapImg" src="https://media.azxgo.com/batu3/map.webp" alt="Aerial survey" class="aerial-img" onerror="this.onerror=null; this.src='WhatsApp Image 2026-10-31 at 10.46.54 AM.jpeg';">
+          <div id="pinsOverlay" style="position: absolute; inset: 0;"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: Lot Details -->
+  <div class="modal-overlay" id="modalLotDetail">
+    <div class="modal-box">
+      <div class="modal-head">
+        <h3 id="modalLotTitle">Info Lot</h3>
+        <button class="btn-close-x" onclick="closeAppModal('modalLotDetail')">✕</button>
+      </div>
+      <div class="modal-content-area">
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Lot Number</span><strong id="detailLotId">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Owner Name</span><strong id="detailOwnerName">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Contact No.</span><strong id="detailContact">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Major Sector</span><strong id="detailSectorTag">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">House Address</span><strong id="detailAddress">-</strong></div>
+
+        <!-- Admin Edit & Delete Controls -->
+        <div id="adminLotModifyControls" style="display:none; gap:10px; margin-top:1.25rem; padding-top:1rem; border-top:1.5px dashed #fed7aa;">
+          <button class="btn-nav btn-nav-outline" style="flex:1; justify-content:center;" onclick="openEditLotModalFromCurrent()">✏️ Edit Owner</button>
+          <button class="btn-nav btn-nav-danger" style="flex:1; justify-content:center;" onclick="deleteCurrentLot()">🗑️ Padam Lot</button>
+        </div>
+
+        <button class="btn-primary-action" style="margin-top:1.25rem;" onclick="closeAppModal('modalLotDetail')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Sector List (Closes cleanly when viewing individual lot) -->
+  <div class="modal-overlay" id="modalSectorList">
+    <div class="modal-box" style="max-width: 520px;">
+      <div class="modal-head">
+        <h3 id="modalSectorListTitle">Sektor Direktori</h3>
+        <button class="btn-close-x" onclick="closeAppModal('modalSectorList')">✕</button>
+      </div>
+      <div class="modal-content-area">
+        <div style="max-height: 320px; overflow-y: auto;">
+          <table class="data-table">
+            <thead>
+              <tr><th>Plot</th><th>Name Pemilik</th><th>Tindakan</th></tr>
+            </thead>
+            <tbody id="sectorTableBody"></tbody>
+          </table>
+        </div>
+        <button class="btn-primary-action" style="margin-top:1.25rem;" onclick="closeAppModal('modalSectorList')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Admin Authentication ('adminbatutiga') -->
+  <div class="modal-overlay" id="modalAdminAuth">
+    <div class="modal-box" style="max-width: 400px;">
+      <div class="modal-head">
+        <h3>🔐 Pengesahan Admin</h3>
+        <button class="btn-close-x" onclick="closeAppModal('modalAdminAuth')">✕</button>
+      </div>
+      <div class="modal-content-area">
+        <p style="font-size:0.88rem; color:#64748b; margin-bottom:1.2rem;">Masukkan password admin.</p>
+        <form onsubmit="handleAdminPasswordSubmit(event)">
+          <div class="form-group">
+            <label class="form-label" for="adminPasswordInput">Password Admin</label>
+            <input type="password" id="adminPasswordInput" class="input-box" placeholder="password" required>
+          </div>
+          <div id="adminAuthFeedback" style="color:var(--danger); font-weight:700; font-size:0.85rem; margin-bottom:8px;"></div>
+          <button type="submit" class="btn-primary-action">Akses Admin</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add / Edit Lot Form -->
+  <div class="modal-overlay" id="modalLotForm">
+    <div class="modal-box" style="max-width: 450px;">
+      <div class="modal-head">
+        <h3 id="modalLotFormTitle">Maklumat Lot</h3>
+        <button class="btn-close-x" onclick="closeAppModal('modalLotForm')">✕</button>
+      </div>
+      <div class="modal-content-area">
+        <form onsubmit="saveLotData(event)">
+          <input type="hidden" id="formLotOriginalId">
+          <div class="form-group"><label class="form-label">Pengenal Lot</label><input type="text" id="formLotNumber" class="input-box" required></div>
+          <div class="form-group"><label class="form-label">Name Pemilik</label><input type="text" id="formOwnerName" class="input-box" required></div>
+          <div class="form-group"><label class="form-label">Pilihan Lot</label>
+          <div class="form-group"><label class="form-label">Nombor Telefon</label><input type="tel" id="formContact" class="input-box" required></div>
+            <select id="formSectorSelect" class="input-box">
+              <option value="722">Lot 722 (Blue)</option>
+              <option value="718">Lot 718 (Yellow)</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label">Alamat</label><input type="text" id="formHouseAddress" class="input-box" required></div>
+          <button type="submit" class="btn-primary-action">Simpan maklumat</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Announcement Form -->
+  <div class="modal-overlay" id="modalAnnounceForm">
+    <div class="modal-box" style="max-width: 450px;">
+      <div class="modal-head">
+        <h3>📢 Hantar Pengumuman</h3>
+        <button class="btn-close-x" onclick="closeAppModal('modalAnnounceForm')">✕</button>
+      </div>
+      <div class="modal-content-area">
+        <form onsubmit="saveNewAnnouncement(event)">
+          <div class="form-group"><label class="form-label">Tajuk</label><input type="text" id="announceTitle" class="input-box" required></div>
+          <div class="form-group"><label class="form-label">Tarikh</label><input type="text" id="announceDate" class="input-box" value="November 2026" required></div>
+          <div class="form-group"><label class="form-label">Isi</label><textarea id="announceText" class="input-box" rows="3" required></textarea></div>
+          <button type="submit" class="btn-primary-action">Terbitkan</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Add Gallery Photo Form -->
+  <div class="modal-overlay" id="modalGalleryForm">
+    <div class="modal-box" style="max-width: 450px;">
+      <div class="modal-head">
+        <h3>🖼️ Tambah gambar ke galeri</h3>
+        <button class="btn-close-x" onclick="closeAppModal('modalGalleryForm')">✕</button>
+      </div>
+      <div class="modal-content-area">
+        <form onsubmit="saveNewGalleryImage(event)">
+          <div class="form-group"><label class="form-label">Tajuk Gambar</label><input type="text" id="galleryTitleInput" class="input-box" placeholder="e.g. Community Gate" required></div>
+          <div class="form-group"><label class="form-label">Kategori</label><input type="text" id="galleryCategoryInput" class="input-box" placeholder="e.g. Infrastructure" required></div>
+          <div class="form-group"><label class="form-label">Image URL</label><input type="url" id="galleryUrlInput" class="input-box" placeholder="https://..." required></div>
+          <button type="submit" class="btn-primary-action">Tambah Gambar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Logout Reminder -->
+  <div class="modal-overlay" id="modalLogoutReminder">
+    <div class="modal-box" style="max-width: 380px; text-align: center;">
+      <div class="modal-content-area" style="padding: 2.2rem 1.8rem;">
+        <div style="font-size: 3rem; margin-bottom: 0.5rem;">🚪</div>
+        <h3 style="font-size: 1.3rem; color: #7c2d12; margin-bottom: 6px;">Log Out Confirmation</h3>
+        <p style="color: #64748b; font-size: 0.88rem; margin-bottom: 1.5rem;">
+          Make sure to log out before closing your web browser.
+        </p>
+        <div style="display: flex; gap: 10px;">
+          <button class="btn-nav btn-nav-outline" style="flex:1; justify-content:center;" onclick="closeAppModal('modalLogoutReminder')">Kekal disini</button>
+          <button class="btn-nav btn-nav-danger" style="flex:1; justify-content:center;" onclick="executeLogout()">Log Out Sekarang</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load fallback data repository -->
+  <script src="lots-data.js"></script>
+
+  <script>
+    /* ==========================================================================
+       SUPABASE CONFIGURATION (ENTER YOUR PROJECT DETAILS HERE)
+       ========================================================================== */
+    const SUPABASE_URL = 'https://tfjdproercfhchqyrnsz.supabase.co'; // e.g. 'https://xyzcompany.supabase.co'
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRmamRwcm9lcmNmaGNocXlybnN6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NDIwMDMsImV4cCI6MjEwOTAxODAwM30.WOsXyK8HSSR-g0pLoxT-HBkIPKNqHjLGSVVGCfBqxwY'; // e.g. 'eyJhbGciOiJIUzI1Ni...'
+
+    let dbClient = null;
+    if (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase) {
+      try {
+        dbClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        document.getElementById('dbStatusBadge').style.display = 'inline-flex';
+      } catch (err) {
+        console.warn("Could not initialize Supabase:", err);
+      }
+    }
+
+    /* State variables */
+    let isAuthenticated = false;
+    let isAdminAuthenticated = false;
+    let currentlyInspectedLotId = null;
+
+    /* 1. AUTHENTICATION (Password Only: 'batutiga') */
+    function handleUserLogin(e) {
+      e.preventDefault();
+      const pass = document.getElementById('portalPassword').value.trim();
+      const feedback = document.getElementById('loginFeedbackMsg');
+
+      if (pass === 'batutiga') {
+        feedback.style.color = 'var(--success)';
+        feedback.textContent = 'Verification successful! Loading...';
+        setTimeout(() => {
+          isAuthenticated = true;
+          document.getElementById('portalPassword').value = '';
+          feedback.textContent = '';
+          switchView('viewMenu');
+          renderAllAnnouncements();
+          renderGallery();
+          renderMapPins();
+          updateCounts();
+        }, 300);
+      } else {
+        feedback.style.color = 'var(--danger)';
+        feedback.textContent = 'Invalid password. Enter "batutiga".';
+      }
+    }
+
+    /* 2. ADMIN AUTHENTICATION ('adminbatutiga') */
+    function handleAdminModeClick() {
+      if (!isAdminAuthenticated) {
+        openAppModal('modalAdminAuth');
+      } else {
+        if (confirm("Log out of Admin Mode?")) {
+          isAdminAuthenticated = false;
+          syncAdminState();
+        }
+      }
+    }
+
+    function handleAdminPasswordSubmit(e) {
+      e.preventDefault();
+      const pass = document.getElementById('adminPasswordInput').value.trim();
+      const feedback = document.getElementById('adminAuthFeedback');
+
+      if (pass === 'adminbatutiga') {
+        isAdminAuthenticated = true;
+        feedback.textContent = '';
+        document.getElementById('adminPasswordInput').value = '';
+        closeAppModal('modalAdminAuth');
+        syncAdminState();
+      } else {
+        feedback.textContent = 'Incorrect password. Enter "retype".';
+      }
+    }
+
+    function syncAdminState() {
+      const toggle = document.getElementById('adminToggleBtn');
+      const icon = document.getElementById('adminStatusIcon');
+      const txt = document.getElementById('adminStatusText');
+      const banner = document.getElementById('adminIndicatorBar');
+      const addLot = document.getElementById('adminAddLotBtn');
+      const addAnn = document.getElementById('adminAddAnnounceBtn');
+      const addGal = document.getElementById('adminAddGalleryBtn');
+
+      if (isAdminAuthenticated) {
+        toggle.className = 'admin-pill active';
+        icon.textContent = '🔓';
+        txt.textContent = 'Admin Mode';
+        banner.style.display = 'block';
+        addLot.style.display = 'inline-block';
+        addAnn.style.display = 'inline-block';
+        addGal.style.display = 'inline-block';
+      } else {
+        toggle.className = 'admin-pill locked';
+        icon.textContent = '🔐';
+        txt.textContent = 'Admin Login';
+        banner.style.display = 'none';
+        addLot.style.display = 'none';
+        addAnn.style.display = 'none';
+        addGal.style.display = 'none';
+      }
+      renderAllAnnouncements();
+      renderGallery();
+      if (currentlyInspectedLotId) {
+        document.getElementById('adminLotModifyControls').style.display = isAdminAuthenticated ? 'flex' : 'none';
+      }
+    }
+
+    /* 3. NAVIGATION */
+    function switchView(viewId) {
+      document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+      const activeSec = document.getElementById(viewId);
+      if (activeSec) activeSec.classList.add('active');
+
+      const isWelcome = (viewId === 'viewWelcome');
+      document.getElementById('headerLogoutBtn').style.display = isWelcome ? 'none' : 'flex';
+      document.getElementById('adminToggleBtn').style.display = isWelcome ? 'none' : 'inline-flex';
+      document.getElementById('navBackBtn').style.display = (viewId === 'viewMap') ? 'inline-flex' : 'none';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function promptLogoutReminder() {
+      openAppModal('modalLogoutReminder');
+    }
+
+    function executeLogout() {
+      closeAppModal('modalLogoutReminder');
+      isAuthenticated = false;
+      isAdminAuthenticated = false;
+      syncAdminState();
+      switchView('viewWelcome');
+      renderAllAnnouncements();
+    }
+
+    window.addEventListener('beforeunload', (e) => {
+      if (isAuthenticated) {
+        e.preventDefault();
+        e.returnValue = 'Please remember to log out of Batu 3 Portal.';
+      }
+    });
+
+    /* 4. MODALS */
+    function openAppModal(id) {
+      document.getElementById(id)?.classList.add('active');
+    }
+    function closeAppModal(id) {
+      document.getElementById(id)?.classList.remove('active');
+    }
+
+    /* 5. ANNOUNCEMENTS (SUPABASE + LOCAL SYNC) */
+    async function loadAnnouncementsFromCloud() {
+      if (!dbClient) return;
+      const { data, error } = await dbClient.from('announcements').select('*').order('id', { ascending: false });
+      if (data && !error && data.length > 0) {
+        announcementsData = data;
+        renderAllAnnouncements();
+      }
+    }
+
+    function renderAllAnnouncements() {
+      const loginBox = document.getElementById('loginAnnouncementsList');
+      const dashBox = document.getElementById('dashboardAnnouncementsList');
+
+      const markup = announcementsData.map(ann => `
+        <div class="announcement-item">
+          ${isAdminAuthenticated ? `<button class="btn-delete-badge" onclick="deleteAnnouncement(${ann.id})" title="Delete notice">✕</button>` : ''}
+          <div class="announcement-date">📅 ${ann.date}</div>
+          <h4>${ann.title}</h4>
+          <p class="announcement-text">${ann.text}</p>
+        </div>
+      `).join('');
+
+      if (loginBox) loginBox.innerHTML = markup;
+      if (dashBox) dashBox.innerHTML = markup;
+    }
+
+    async function saveNewAnnouncement(e) {
+      e.preventDefault();
+      const title = document.getElementById('announceTitle').value.trim();
+      const date = document.getElementById('announceDate').value.trim();
+      const text = document.getElementById('announceText').value.trim();
+
+      const newRecord = { title, date, text };
+
+      if (dbClient) {
+        const { data, error } = await dbClient.from('announcements').insert([newRecord]).select();
+        if (data && !error) {
+          announcementsData.unshift(data[0]);
+        }
+      } else {
+        announcementsData.unshift({ id: Date.now(), ...newRecord });
+      }
+
+      closeAppModal('modalAnnounceForm');
+      renderAllAnnouncements();
+      document.getElementById('announceTitle').value = '';
+      document.getElementById('announceText').value = '';
+    }
+
+    async function deleteAnnouncement(id) {
+      if (!confirm("Are you sure you want to delete this notice?")) return;
+
+      if (dbClient) {
+        await dbClient.from('announcements').delete().eq('id', id);
+      }
+      announcementsData = announcementsData.filter(a => a.id !== id);
+      renderAllAnnouncements();
+    }
+
+    /* 6. HORIZONTAL GALLERY (SUPABASE + LOCAL SYNC) */
+    async function loadGalleryFromCloud() {
+      if (!dbClient) return;
+      const { data, error } = await dbClient.from('gallery').select('*').order('id', { ascending: false });
+      if (data && !error && data.length > 0) {
+        galleryData = data;
+        renderGallery();
+      }
+    }
+
+    function renderGallery() {
+      const track = document.getElementById('galleryTrack');
+      if (!track) return;
+
+      // Duplicate list for infinite marquee scrolling
+      const items = [...galleryData, ...galleryData];
+      track.innerHTML = items.map((item) => `
+        <div class="gallery-card">
+          ${isAdminAuthenticated ? `<button class="btn-delete-badge" onclick="deleteGalleryItem(${item.id})" title="Delete photo">✕</button>` : ''}
+          <img src="${item.img}" alt="${item.title}" onerror="this.src='https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80'">
+          <div class="gallery-card-info">
+            <span class="gallery-tag">${item.category}</span>
+            <div class="gallery-title">${item.title}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function saveNewGalleryImage(e) {
+      e.preventDefault();
+      const title = document.getElementById('galleryTitleInput').value.trim();
+      const category = document.getElementById('galleryCategoryInput').value.trim();
+      const img = document.getElementById('galleryUrlInput').value.trim();
+
+      const newPhoto = { title, category, img };
+
+      if (dbClient) {
+        const { data, error } = await dbClient.from('gallery').insert([newPhoto]).select();
+        if (data && !error) {
+          galleryData.unshift(data[0]);
+        }
+      } else {
+        galleryData.unshift({ id: Date.now(), ...newPhoto });
+      }
+
+      closeAppModal('modalGalleryForm');
+      renderGallery();
+      document.getElementById('galleryTitleInput').value = '';
+      document.getElementById('galleryCategoryInput').value = '';
+      document.getElementById('galleryUrlInput').value = '';
+    }
+
+    async function deleteGalleryItem(id) {
+      if (!confirm("Delete this photo from the gallery?")) return;
+
+      if (dbClient) {
+        await dbClient.from('gallery').delete().eq('id', id);
+      }
+      galleryData = galleryData.filter(g => g.id !== id);
+      renderGallery();
+    }
+
+    /* 7. SECTOR DIRECTORY & MAP PINS */
+    async function loadLotsFromCloud() {
+      if (!dbClient) return;
+      const { data, error } = await dbClient.from('lots').select('*');
+      if (data && !error && data.length > 0) {
+        lotRepository = data;
+        renderMapPins();
+        updateCounts();
+      }
+    }
+
+    function openSectorDirectoryModal(sector) {
+      const list = lotRepository.filter(l => l.sector === sector);
+      document.getElementById('modalSectorListTitle').textContent = `Sector Lot ${sector} Owners (${list.length})`;
+      const tbody = document.getElementById('sectorTableBody');
+
+      tbody.innerHTML = list.map(lot => `
+        <tr>
+          <td><strong style="color: #9a3412;">${lot.id}</strong></td>
+          <td>${lot.owner}</td>
+          <td>
+            <button class="btn-nav btn-nav-outline" style="padding:4px 10px; font-size:0.75rem;" onclick="viewLotFromSector('${lot.id}')">
+              View
+            </button>
+          </td>
+        </tr>
+      `).join('');
+
+      openAppModal('modalSectorList');
+    }
+
+    function viewLotFromSector(lotId) {
+      closeAppModal('modalSectorList');
+      inspectLotDetails(lotId);
+    }
+
+    function inspectLotDetails(lotId) {
+      const lot = lotRepository.find(l => l.id === lotId);
+      if (!lot) return;
+
+      currentlyInspectedLotId = lot.id;
+      document.getElementById('modalLotTitle').textContent = `Lot Information (${lot.id})`;
+      document.getElementById('detailLotId').textContent = lot.id;
+      document.getElementById('detailOwnerName').textContent = lot.owner;
+      document.getElementById('detailContact').textContent = lot.contact || '-';
+      document.getElementById('detailSectorTag').textContent = `Sector Lot ${lot.sector} (${lot.color.toUpperCase()})`;
+      document.getElementById('detailAddress').textContent = lot.address;
+      document.getElementById('adminLotModifyControls').style.display = isAdminAuthenticated ? 'flex' : 'none';
+
+      openAppModal('modalLotDetail');
+    }
+
+    function renderMapPins() {
+      const overlay = document.getElementById('pinsOverlay');
+      if (!overlay) return;
+      overlay.innerHTML = '';
+
+      lotRepository.forEach(lot => {
+        const pin = document.createElement('div');
+        pin.className = `plot-pin ${lot.color === 'yellow' ? 'plot-yellow' : 'plot-blue'}`;
+        pin.style.left = `${lot.x}%`;
+        pin.style.top = `${lot.y}%`;
+        pin.textContent = lot.id.split('-')[1] || lot.id;
+        pin.title = `Lot ${lot.id}: ${lot.owner}`;
+        pin.onclick = (e) => {
+          e.stopPropagation();
+          inspectLotDetails(lot.id);
+        };
+        overlay.appendChild(pin);
+      });
+    }
+
+    function updateCounts() {
+      document.getElementById('count718').textContent = `${lotRepository.filter(l => l.sector === '718').length} Lots`;
+      document.getElementById('count722').textContent = `${lotRepository.filter(l => l.sector === '722').length} Lots`;
+    }
+
+    /* 8. ADMIN LOT ADD, EDIT & DELETE (SUPABASE + LOCAL SYNC) */
+    function openAddLotModal() {
+      document.getElementById('modalLotFormTitle').textContent = 'Add New Lot';
+      document.getElementById('formLotOriginalId').value = '';
+      document.getElementById('formLotNumber').value = '';
+      document.getElementById('formOwnerName').value = '';
+      document.getElementById('formContact').value = '';
+      document.getElementById('formSectorSelect').value = '718';
+      document.getElementById('formHouseAddress').value = '';
+      openAppModal('modalLotForm');
+    }
+
+    function openEditLotModalFromCurrent() {
+      const lot = lotRepository.find(l => l.id === currentlyInspectedLotId);
+      if (!lot) return;
+      closeAppModal('modalLotDetail');
+
+      document.getElementById('modalLotFormTitle').textContent = `Edit Lot ${lot.id}`;
+      document.getElementById('formLotOriginalId').value = lot.id;
+      document.getElementById('formLotNumber').value = lot.id;
+      document.getElementById('formOwnerName').value = lot.owner;
+      document.getElementById('formContact').value = lot.contact || '';
+      document.getElementById('formSectorSelect').value = lot.sector;
+      document.getElementById('formHouseAddress').value = lot.address;
+      openAppModal('modalLotForm');
+    }
+
+    async function saveLotData(e) {
+      e.preventDefault();
+      const origId = document.getElementById('formLotOriginalId').value;
+      const num = document.getElementById('formLotNumber').value.trim();
+      const owner = document.getElementById('formOwnerName').value.trim();
+      const contact = document.getElementById('formContact').value.trim();
+      const sec = document.getElementById('formSectorSelect').value;
+      const addr = document.getElementById('formHouseAddress').value.trim();
+
+      let lotObject = null;
+
+      if (origId) {
+        const idx = lotRepository.findIndex(l => l.id === origId);
+        if (idx !== -1) {
+          lotObject = { ...lotRepository[idx], id: num, owner, contact: contact, sector: sec, color: sec === '718' ? 'blue' : 'yellow', address: addr };
+          lotRepository[idx] = lotObject;
+        }
+      } else {
+        lotObject = {
+          id: num,
+          color: sec === '718' ? 'blue' : 'yellow',
+          sector: sec,
+          x: 45 + Math.random() * 15,
+          y: 45 + Math.random() * 20,
+          owner: owner,
+          contact: contact,
+          address: addr
+        };
+        lotRepository.push(lotObject);
+      }
+
+      if (dbClient && lotObject) {
+        await dbClient.from('lots').upsert([lotObject]);
+      }
+
+      closeAppModal('modalLotForm');
+      renderMapPins();
+      updateCounts();
+    }
+
+    async function deleteCurrentLot() {
+      if (!confirm(`Are you sure you want to delete Lot ${currentlyInspectedLotId}?`)) return;
+
+      if (dbClient) {
+        await dbClient.from('lots').delete().eq('id', currentlyInspectedLotId);
+      }
+
+      lotRepository = lotRepository.filter(l => l.id !== currentlyInspectedLotId);
+      closeAppModal('modalLotDetail');
+      renderMapPins();
+      updateCounts();
+    }
+
+    // Initialize application and fetch cloud updates
+    window.addEventListener('DOMContentLoaded', async () => {
+      renderAllAnnouncements();
+      renderGallery();
+      updateCounts();
+
+      if (dbClient) {
+        await Promise.all([
+          loadAnnouncementsFromCloud(),
+          loadGalleryFromCloud(),
+          loadLotsFromCloud()
+        ]);
+      }
+    });
+  </script>
+</body>
+</html>
