@@ -845,10 +845,10 @@
               ⭐ Fitur Utama
             </span>
             <h3 style="font-size: 1.45rem; font-weight: 800; color: #7c2d12; margin-bottom: 6px;">
-              Peta Penduduk Interaktif
+              Peta Interaktif
             </h3>
             <p style="color: #64748b; font-size: 0.92rem; margin-bottom: 1.4rem;">
-              Tinjauan fotografi bagi Lot Lot 718 dan Lot 722. Klik pada mana-mana lot untuk mendapatkan butiran lanjut.
+              Tinjauan fotografi bagi Lot 718 dan Lot 722.
             </p>
             <button class="btn-primary-action" onclick="switchView('viewMap')">
               Lancar Peta 🗺️
@@ -940,7 +940,7 @@
 
       <div class="map-viewport">
         <div style="position:relative; width:100%;">
-          <img id="mapImg" src="https://media.azxgo.com/batu3/map.webp" alt="Aerial survey" class="aerial-img" onerror="this.onerror=null; this.src='WhatsApp Image 2026-10-31 at 10.46.54 AM.jpeg';">
+          <img id="mapImg" src="https://media.azxgo.com/batu3/map1.webp" alt="Aerial survey" class="aerial-img" onerror="this.onerror=null; this.src='WhatsApp Image 2026-10-31 at 10.46.54 AM.jpeg';">
           <div id="pinsOverlay" style="position: absolute; inset: 0;"></div>
         </div>
       </div>
@@ -956,11 +956,11 @@
         <button class="btn-close-x" onclick="closeAppModal('modalLotDetail')">✕</button>
       </div>
       <div class="modal-content-area">
-        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Lot Number</span><strong id="detailLotId">-</strong></div>
-        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Owner Name</span><strong id="detailOwnerName">-</strong></div>
-        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Contact No.</span><strong id="detailContact">-</strong></div>
-        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Major Sector</span><strong id="detailSectorTag">-</strong></div>
-        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">House Address</span><strong id="detailAddress">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Nombor Lot</span><strong id="detailLotId">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Pemilik</span><strong id="detailOwnerName">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Telefon</span><strong id="detailContact">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Kelas Lot</span><strong id="detailSectorTag">-</strong></div>
+        <div class="data-card-row"><span style="color:#64748b; font-weight:700;">Alamat Rumah</span><strong id="detailAddress">-</strong></div>
 
         <!-- Admin Edit & Delete Controls -->
         <div id="adminLotModifyControls" style="display:none; gap:10px; margin-top:1.25rem; padding-top:1rem; border-top:1.5px dashed #fed7aa;">
@@ -1381,7 +1381,7 @@
 
     function openSectorDirectoryModal(sector) {
       const list = lotRepository.filter(l => l.sector === sector);
-      document.getElementById('modalSectorListTitle').textContent = `Sector Lot ${sector} Owners (${list.length})`;
+      document.getElementById('modalSectorListTitle').textContent = `Lot ${sector} Pemilik (${list.length})`;
       const tbody = document.getElementById('sectorTableBody');
 
       tbody.innerHTML = list.map(lot => `
@@ -1409,7 +1409,7 @@
       if (!lot) return;
 
       currentlyInspectedLotId = lot.id;
-      document.getElementById('modalLotTitle').textContent = `Lot Information (${lot.id})`;
+      document.getElementById('modalLotTitle').textContent = `Maklumat Lot (${lot.id})`;
       document.getElementById('detailLotId').textContent = lot.id;
       document.getElementById('detailOwnerName').textContent = lot.owner;
       document.getElementById('detailContact').textContent = lot.contact || '-';
@@ -1486,13 +1486,13 @@
       if (origId) {
         const idx = lotRepository.findIndex(l => l.id === origId);
         if (idx !== -1) {
-          lotObject = { ...lotRepository[idx], id: num, owner, contact: contact, sector: sec, color: sec === '718' ? 'blue' : 'yellow', address: addr };
+          lotObject = { ...lotRepository[idx], id: num, owner, contact: contact, sector: sec, color: sec === '718' ? 'yellow' : 'blue', address: addr };
           lotRepository[idx] = lotObject;
         }
       } else {
         lotObject = {
           id: num,
-          color: sec === '718' ? 'blue' : 'yellow',
+          color: sec === '718' ? 'yellow' : 'blue',
           sector: sec,
           x: 45 + Math.random() * 15,
           y: 45 + Math.random() * 20,
